@@ -2,8 +2,12 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, ShoppingBag } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { products } from "@/data/products";
 
 export default function FinalCTA() {
+  const { addItem } = useCart();
+
   return (
     <section id="buy" className="py-24 bg-white relative">
       <div className="container mx-auto px-4 md:px-6">
@@ -29,7 +33,13 @@ export default function FinalCTA() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-orange text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-brand-orange transition-all hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(217,119,87,0.3)] group">
+                <button 
+                  onClick={() => {
+                    const combo = products.find(p => p.id === 'combo-3-vi');
+                    if (combo) addItem(combo);
+                  }}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-brand-orange text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-brand-orange transition-all hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(217,119,87,0.3)] group"
+                >
                   <ShoppingBag size={20} />
                   Mua PHIN GO ngay
                 </button>

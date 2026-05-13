@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 import { Coffee, ArrowRight } from "lucide-react";
 import ProductMockup3D from "./ProductMockup3D";
+import { useCart } from "@/context/CartContext";
+import { products } from "@/data/products";
 
 export default function HeroSection() {
+  const { addItem } = useCart();
   return (
     <section className="relative min-h-screen flex items-center pt-20 pb-16 overflow-hidden">
       {/* Background decoration */}
@@ -45,15 +48,18 @@ export default function HeroSection() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="#products" 
+              <button 
+                onClick={() => {
+                  const combo = products.find(p => p.id === 'combo-3-vi');
+                  if (combo) addItem(combo);
+                }}
                 className="inline-flex items-center justify-center gap-2 bg-brand-coffee text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-orange transition-all hover:-translate-y-1 hover:shadow-[0_10px_20px_rgba(217,119,87,0.3)] group"
               >
-                Trải nghiệm PHIN GO ngay
+                Trải nghiệm Combo 3 vị
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-              </a>
+              </button>
               <a 
-                href="#features" 
+                href="#products" 
                 className="inline-flex items-center justify-center bg-transparent border-2 border-brand-coffee text-brand-coffee px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-coffee hover:text-white transition-colors"
               >
                 Khám phá sản phẩm

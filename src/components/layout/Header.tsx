@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Coffee, Menu, X } from "lucide-react";
+import { Coffee, Menu, X, ShoppingBag } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { totalItems, setIsCartOpen } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,23 +56,38 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* CTA Button */}
-        <div className="hidden md:block">
-          <a
-            href="#buy"
-            className="bg-brand-coffee text-white px-6 py-2.5 rounded-full font-medium hover:bg-brand-orange transition-all hover:shadow-lg hover:-translate-y-0.5 inline-block"
+        {/* Actions */}
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            className="relative p-2 text-brand-coffee hover:bg-brand-coffee/10 rounded-full transition-colors"
           >
-            Mua Ngay
-          </a>
-        </div>
+            <ShoppingBag size={24} />
+            {totalItems > 0 && (
+              <span className="absolute top-0 right-0 bg-brand-orange text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-brand-cream">
+                {totalItems}
+              </span>
+            )}
+          </button>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          className="md:hidden text-brand-coffee"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+          {/* CTA Button */}
+          <div className="hidden md:block">
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="bg-brand-coffee text-white px-6 py-2.5 rounded-full font-medium hover:bg-brand-orange transition-all hover:shadow-lg hover:-translate-y-0.5 inline-block"
+            >
+              Giỏ hàng
+            </button>
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="md:hidden text-brand-coffee"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Nav */}
@@ -87,13 +104,15 @@ export default function Header() {
                 {link.name}
               </a>
             ))}
-            <a
-              href="#buy"
-              className="bg-brand-coffee text-white text-center px-6 py-3 rounded-full font-medium hover:bg-brand-orange transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setIsCartOpen(true);
+              }}
+              className="bg-brand-coffee text-white text-center px-6 py-3 rounded-full font-medium hover:bg-brand-orange transition-colors w-full"
             >
-              Mua Ngay
-            </a>
+              Xem giỏ hàng
+            </button>
           </div>
         </div>
       )}

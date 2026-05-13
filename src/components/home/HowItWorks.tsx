@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useCart } from "@/context/CartContext";
+import { products } from "@/data/products";
 
 const steps = [
   {
@@ -31,6 +33,8 @@ const steps = [
 ];
 
 export default function HowItWorks() {
+  const { addItem } = useCart();
+
   return (
     <section id="how-it-works" className="py-24 bg-brand-coffee text-brand-cream relative overflow-hidden">
       {/* Decorative background elements */}
@@ -83,12 +87,15 @@ export default function HowItWorks() {
             transition={{ delay: 0.6 }}
             className="mt-16 text-center"
           >
-            <a 
-              href="#products" 
+            <button 
+              onClick={() => {
+                const original = products.find(p => p.id === 'original');
+                if (original) addItem(original);
+              }}
               className="inline-block bg-brand-orange text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-brand-orange transition-all hover:-translate-y-1 hover:shadow-lg"
             >
               Pha thử ly đầu tiên
-            </a>
+            </button>
           </motion.div>
         </div>
       </div>

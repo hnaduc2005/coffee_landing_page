@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/context/CartContext";
+import CartDrawer from "@/components/cart/CartDrawer";
 
 const outfit = Outfit({
   variable: "--font-sans",
@@ -21,7 +23,10 @@ export default function RootLayout({
   return (
     <html lang="vi" className={`${outfit.variable} scroll-smooth antialiased`}>
       <body className="min-h-screen bg-brand-cream text-brand-coffee font-sans flex flex-col">
-        {children}
+        <CartProvider>
+          {children}
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );
