@@ -21,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${outfit.variable} scroll-smooth antialiased`}>
-      <body className="min-h-screen bg-brand-cream text-brand-coffee font-sans flex flex-col">
+    <html lang="vi" className={`${outfit.variable} scroll-smooth antialiased`} suppressHydrationWarning>
+      <body className="min-h-screen bg-brand-cream text-brand-coffee font-sans flex flex-col" suppressHydrationWarning>
         <CartProvider>
           {children}
           <CartDrawer />

@@ -1,5 +1,12 @@
 const SHEET_NAME = "Orders";
 const SECRET_KEY = "PHINGO_SECRET_2026";
+const SELLER_EMAIL = "uyentu10@gmail.com";
+
+// Chạy hàm này thủ công 1 lần duy nhất trong trình soạn thảo để cấp quyền gửi mail
+function authorizeEmail() {
+  const quota = MailApp.getRemainingDailyQuota();
+  console.log("Bạn đã cấp quyền thành công! Quota email còn lại hôm nay: " + quota);
+}
 
 function doPost(e) {
   try {
@@ -61,6 +68,38 @@ function doPost(e) {
 
     let paymentStatus = body.paymentMethod === "BANK_TRANSFER" ? "Chờ chuyển khoản" : "Thanh toán khi nhận hàng";
 
+    let internalNote = "";
+
+    try {
+      const formattedTotal = Number(body.total || 0).toLocaleString("vi-VN") + "đ";
+      const formattedSubtotal = Number(body.subtotal || 0).toLocaleString("vi-VN") + "đ";
+      const formattedShipping = Number(body.shippingFee || 0).toLocaleString("vi-VN") + "đ";
+      const orderTime = Utilities.formatDate(new Date(), "GMT+7", "dd/MM/yyyy HH:mm:ss");
+
+      const emailSubject = `[PHIN GO] Đơn hàng mới ${orderId}`;
+      const emailBody = `Bạn có một đơn hàng mới từ PHIN GO!\n\n` +
+        `Mã đơn hàng: ${orderId}\n` +
+        `Thời gian đặt: ${orderTime}\n` +
+        `-----------------------------------------\n` +
+        `TÊN KHÁCH HÀNG: ${body.customerName || ""}\n` +
+        `SỐ ĐIỆN THOẠI: ${body.phone || ""}\n` +
+        `ĐỊA CHỈ: ${body.address || ""}\n` +
+        `THÀNH PHỐ: ${body.city || ""}\n` +
+        `-----------------------------------------\n` +
+        `SẢN PHẨM:\n${itemsText.replace(/; /g, "\n")}\n\n` +
+        `Tạm tính: ${formattedSubtotal}\n` +
+        `Phí ship: ${formattedShipping}\n` +
+        `TỔNG TIỀN: ${formattedTotal}\n` +
+        `-----------------------------------------\n` +
+        `Phương thức thanh toán: ${body.paymentMethod === "BANK_TRANSFER" ? "Chuyển khoản ngân hàng" : "Thanh toán khi nhận hàng (COD)"}\n` +
+        `Ghi chú: ${body.note || "Không có"}\n`;
+
+      MailApp.sendEmail(SELLER_EMAIL, emailSubject, emailBody);
+      internalNote = "Đã gửi email";
+    } catch (emailError) {
+      internalNote = "Lỗi gửi mail: " + emailError.message;
+    }
+
     sheet.appendRow([
       orderId,
       new Date(),
@@ -77,7 +116,7 @@ function doPost(e) {
       paymentStatus,
       "Mới đặt",
       body.note || "",
-      "",
+      internalNote,
     ]);
 
     return jsonResponse({
