@@ -52,19 +52,14 @@ function doPost(e) {
       })
       .join("; ");
 
-    let paymentStatus = "Chưa thanh toán";
-
-    if (body.paymentMethod === "BANK_TRANSFER") {
-      paymentStatus = "Chờ chuyển khoản";
+    if (body.paymentMethod !== "COD" && body.paymentMethod !== "BANK_TRANSFER") {
+      return jsonResponse({
+        success: false,
+        message: "Invalid payment method. Only COD and BANK_TRANSFER are accepted.",
+      });
     }
 
-    if (body.paymentMethod === "COD") {
-      paymentStatus = "Thanh toán khi nhận hàng";
-    }
-
-    if (body.paymentMethod === "ZALO") {
-      paymentStatus = "Chờ xác nhận qua Zalo";
-    }
+    let paymentStatus = body.paymentMethod === "BANK_TRANSFER" ? "Chờ chuyển khoản" : "Thanh toán khi nhận hàng";
 
     sheet.appendRow([
       orderId,

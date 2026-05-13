@@ -1,4 +1,4 @@
-export type PaymentMethod = "COD" | "BANK_TRANSFER" | "ZALO";
+export type PaymentMethod = "COD" | "BANK_TRANSFER";
 
 export interface CheckoutFormData {
   customerName: string;

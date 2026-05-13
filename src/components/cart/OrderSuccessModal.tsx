@@ -5,10 +5,9 @@ interface OrderSuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
   orderId?: string;
-  isZalo?: boolean;
 }
 
-export default function OrderSuccessModal({ isOpen, onClose, orderId, isZalo }: OrderSuccessModalProps) {
+export default function OrderSuccessModal({ isOpen, onClose, orderId }: OrderSuccessModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -36,7 +35,7 @@ export default function OrderSuccessModal({ isOpen, onClose, orderId, isZalo }: 
         </div>
 
         <h2 className="text-2xl font-bold text-brand-coffee mb-2">
-          {isZalo ? "Đã chuyển hướng Zalo!" : "Đặt hàng thành công!"}
+          Đặt hàng thành công!
         </h2>
         
         {orderId && (
@@ -47,9 +46,7 @@ export default function OrderSuccessModal({ isOpen, onClose, orderId, isZalo }: 
         )}
 
         <p className="text-brand-coffee/80 leading-relaxed mb-8">
-          {isZalo 
-            ? "Đơn hàng của bạn cũng đã được ghi nhận trên hệ thống. PHIN GO sẽ phản hồi tin nhắn Zalo của bạn sớm nhất."
-            : "Cảm ơn bạn đã tin tưởng. PHIN GO sẽ sớm liên hệ qua số điện thoại để xác nhận đơn hàng."}
+          Cảm ơn bạn đã tin tưởng. PHIN GO sẽ sớm liên hệ qua số điện thoại để xác nhận đơn hàng.
         </p>
 
         <button 

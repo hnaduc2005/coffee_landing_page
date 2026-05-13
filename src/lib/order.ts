@@ -15,13 +15,9 @@ export async function submitOrder(payload: OrderPayload): Promise<OrderResponse>
     const response = await fetch(SCRIPT_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "text/plain;charset=utf-8",
       },
       body: JSON.stringify(payload),
-      // Set no-cors if needed by Google Apps Script, but usually standard POST works 
-      // if GAS is configured properly with text/plain response. However, we're returning JSON, 
-      // so the web app must be deployed to execute as "Me" and access "Anyone".
-      // Note: fetch to GAS often returns a redirect, so we follow it by default.
     });
 
     if (!response.ok) {

@@ -14,7 +14,7 @@ export default function CartDrawer() {
   const { isCartOpen, setIsCartOpen, items, subtotal, shippingFee, total, clearCart, totalItems } = useCart();
   const [isCheckout, setIsCheckout] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [successData, setSuccessData] = useState<{ isOpen: boolean; orderId?: string; isZalo?: boolean }>({
+  const [successData, setSuccessData] = useState<{ isOpen: boolean; orderId?: string }>({
     isOpen: false,
   });
 
@@ -25,19 +25,7 @@ export default function CartDrawer() {
     }, 300); // Reset after closing animation
   };
 
-  const generateZaloMessage = (formData: CheckoutFormData) => {
-    const itemsText = items.map(item => `- ${item.name} x ${item.quantity}`).join('\n');
-    return `Xin chào PHIN GO, tôi muốn đặt:
-${itemsText}
 
-Tổng tiền: ${total.toLocaleString("vi-VN")}đ
-
-Tên: ${formData.customerName}
-SĐT: ${formData.phone}
-Địa chỉ: ${formData.address}, ${formData.city}
-Ghi chú: ${formData.note || "Không có"}
-Phương thức thanh toán: Đặt qua Zalo`;
-  };
 
   const handleCheckoutSubmit = async (formData: CheckoutFormData) => {
     setIsLoading(true);
@@ -57,22 +45,14 @@ Phương thức thanh toán: Đặt qua Zalo`;
       total,
     };
 
-    const isZalo = formData.paymentMethod === "ZALO";
-    
-    if (isZalo) {
-      // Create Zalo URL
-      const message = encodeURIComponent(generateZaloMessage(formData));
-      // Using a placeholder Zalo OA link or phone number
-      const zaloUrl = `https://zalo.me/0123456789?text=${message}`;
-      window.open(zaloUrl, "_blank");
-    }
+
 
     try {
       // Always submit to Google Sheet to keep record, even for Zalo
       const response = await submitOrder(payload);
 
       if (response.success) {
-        setSuccessData({ isOpen: true, orderId: response.orderId, isZalo });
+        setSuccessData({ isOpen: true, orderId: response.orderId });
         clearCart();
         handleClose();
       } else {
@@ -201,7 +181,6 @@ Phương thức thanh toán: Đặt qua Zalo`;
         isOpen={successData.isOpen} 
         onClose={() => setSuccessData({ isOpen: false })} 
         orderId={successData.orderId}
-        isZalo={successData.isZalo}
       />
     </>
   );

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { PaymentMethod, CheckoutFormData } from "@/types/order";
-import { Banknote, CreditCard, MessageCircle } from "lucide-react";
+import { Banknote, CreditCard } from "lucide-react";
 
 interface CheckoutFormProps {
   onSubmit: (data: CheckoutFormData) => void;
@@ -195,27 +195,6 @@ export default function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps)
           </div>
         </label>
 
-        <label className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-colors ${formData.paymentMethod === "ZALO" ? "border-[#0068FF] bg-[#0068FF]/5" : "border-brand-coffee/20 bg-white hover:bg-brand-cream/50"}`}>
-          <div className="pt-1">
-             <input
-              type="radio"
-              name="paymentMethod"
-              value="ZALO"
-              checked={formData.paymentMethod === "ZALO"}
-              onChange={handleChange}
-              className="w-4 h-4 text-[#0068FF] focus:ring-[#0068FF]"
-            />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <MessageCircle size={18} className="text-[#0068FF]" />
-              <span className="font-bold text-[#0068FF]">Đặt qua Zalo</span>
-            </div>
-            {formData.paymentMethod === "ZALO" && (
-              <p className="text-sm text-brand-coffee/70 mt-2">Hệ thống sẽ tạo tin nhắn tự động có sẵn thông tin đơn hàng để bạn gửi cho Zalo OA của PHIN GO.</p>
-            )}
-          </div>
-        </label>
       </div>
 
       <button
@@ -224,16 +203,12 @@ export default function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps)
         className={`w-full py-4 rounded-full font-bold text-lg mt-4 transition-all shadow-md ${
           isLoading 
             ? "bg-brand-coffee/50 text-white cursor-not-allowed" 
-            : formData.paymentMethod === "ZALO"
-              ? "bg-[#0068FF] text-white hover:bg-[#0052cc] hover:-translate-y-0.5 hover:shadow-lg"
-              : "bg-brand-orange text-white hover:bg-brand-coffee hover:-translate-y-0.5 hover:shadow-lg"
+            : "bg-brand-orange text-white hover:bg-brand-coffee hover:-translate-y-0.5 hover:shadow-lg"
         }`}
       >
         {isLoading 
           ? "Đang gửi đơn..." 
-          : formData.paymentMethod === "ZALO" 
-            ? "Gửi đơn qua Zalo" 
-            : `Đặt hàng • ${total.toLocaleString("vi-VN")}đ`
+          : `Đặt hàng • ${total.toLocaleString("vi-VN")}đ`
         }
       </button>
     </form>
